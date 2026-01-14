@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TodoApp.Views.LoginPage"
+             Title="Logowanie">
+
+    <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+
+        <Image Source="logo.png" 
+               HeightRequest="600" 
+               WidthRequest="600" 
+               HorizontalOptions="Center" />
+
+        <Label Text="Witaj w TodoApp!" 
+               Margin="0, -200, 0, 0"
+               FontSize="32" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="{DynamicResource Primary}" />
+
+        <Entry Placeholder="Nazwa użytkownika"
+               Text="{Binding Username}" />
+
+        <Entry Placeholder="Hasło"
+               IsPassword="True"
+               Text="{Binding Password}" />
+
+        <Button Text="Zaloguj się"
+                Command="{Binding LoginCommand}"
+                HeightRequest="60"
+                FontSize="18"/>
+
+        <Button Text="Nie masz konta? Zarejestruj się"
+                Command="{Binding GoToRegisterCommand}"
+                BackgroundColor="Transparent"
+                TextColor="{DynamicResource Primary}" />
+
+    </VerticalStackLayout>
+</ContentPage>
