@@ -12,7 +12,7 @@ namespace TodoApp.ViewModels
         private readonly DatabaseService _databaseService;
 
         [ObservableProperty]
-        TodoItem todoItem;
+        TodoItem todoItem = default!;
 
         public List<string> Categories { get; } = new()
         {

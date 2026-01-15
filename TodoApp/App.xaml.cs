@@ -6,35 +6,40 @@
         {
             InitializeComponent();
 
-            // 1. NOWOŚĆ: Ładujemy zapisany motyw OD RAZU przy starcie
+            // Ładujemy zapisany motyw OD RAZU przy starcie
             ApplyTheme();
 
             MainPage = new AppShell();
         }
 
-        protected override Window CreateWindow(IActivationState activationState)
+        // Naprawa CS8765: dodanie ? (nullable) do activationState
+        protected override Window CreateWindow(IActivationState? activationState)
         {
             var window = base.CreateWindow(activationState);
 
-            // Ustawienia rozmiaru okna dla Windows i Mac (Twoje stare ustawienia)
-            if (DeviceInfo.Platform == DevicePlatform.WinUI || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
+            // Naprawa CS8602: Sprawdzamy czy window nie jest null przed ustawieniem właściwości
+            if (window != null)
             {
-                window.Width = 500;  // Szersze
-                window.Height = 950; // Wyższe
+                if (DeviceInfo.Platform == DevicePlatform.WinUI || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
+                {
+                    window.Width = 500;
+                    window.Height = 950;
 
-                // Blokada przed zbyt mocnym zmniejszeniem
-                window.MinimumWidth = 450;
-                window.MinimumHeight = 700;
+                    window.MinimumWidth = 450;
+                    window.MinimumHeight = 700;
+                }
             }
 
-            return window;
+            // Naprawa CS8603: zwracamy window lub tworzymy nowe, by uniknąć null
+            return window ?? new Window();
         }
 
-        // 2. NOWOŚĆ: Metoda statyczna, którą będziemy wołać też z Ustawień
         public static void ApplyTheme()
         {
-            // Pobieramy wartość z pamięci (domyślnie "System")
             var theme = Preferences.Get("AppTheme", "System");
+
+            // Naprawa CS8602: bezpieczne sprawdzenie czy Current nie jest null
+            if (Application.Current == null) return;
 
             switch (theme)
             {
@@ -45,7 +50,7 @@
                     Application.Current.UserAppTheme = AppTheme.Dark;
                     break;
                 default:
-                    Application.Current.UserAppTheme = AppTheme.Unspecified; // Systemowy
+                    Application.Current.UserAppTheme = AppTheme.Unspecified;
                     break;
             }
         }

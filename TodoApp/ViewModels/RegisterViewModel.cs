@@ -11,10 +11,10 @@ namespace TodoApp.ViewModels
         private readonly DatabaseService _databaseService;
 
         [ObservableProperty]
-        string username;
+        string username = string.Empty;
 
         [ObservableProperty]
-        string password;
+        string password = string.Empty;
 
         public RegisterViewModel(DatabaseService databaseService)
         {
