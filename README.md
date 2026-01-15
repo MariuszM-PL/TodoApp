@@ -24,4 +24,5 @@ Aplikacja posiada nowoczesny interfejs z kafelkowym układem zadań, dynamicznym
 *Projekt stworzony w celach edukacyjnych.*
 
 Mariusz Mikołajczyk
+
 Patrycja Dorszyńska
