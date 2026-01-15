@@ -2,15 +2,14 @@
 using CommunityToolkit.Mvvm.Input;
 using TodoApp.Models;
 using TodoApp.Services;
+using TodoApp.Helpers; // Ważne: to pozwala używać PasswordHasher
 
 namespace TodoApp.ViewModels
 {
-    // "partial" jest wymagane przez bibliotekę MVVM
     public partial class RegisterViewModel : ObservableObject
     {
         private readonly DatabaseService _databaseService;
 
-        // Te pola będą połączone z polami tekstowymi w oknie aplikacji
         [ObservableProperty]
         string username;
 
@@ -22,36 +21,61 @@ namespace TodoApp.ViewModels
             _databaseService = databaseService;
         }
 
-        // Ta funkcja uruchomi się po kliknięciu przycisku "Zarejestruj"
         [RelayCommand]
         async Task Register()
         {
+            // 1. Walidacja: Czy pola nie są puste?
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
-                await Shell.Current.DisplayAlert("Błąd", "Wypełnij wszystkie pola", "OK");
+                await Shell.Current.DisplayAlert("Błąd", "Wprowadź nazwę użytkownika i hasło.", "OK");
                 return;
             }
 
-            // Sprawdź czy użytkownik już istnieje
+            // 2. Walidacja: Minimalna długość (Twoje wymaganie)
+            if (Username.Length < 3)
+            {
+                await Shell.Current.DisplayAlert("Błąd", "Nazwa użytkownika musi mieć min. 3 znaki.", "OK");
+                return;
+            }
+
+            if (Password.Length < 5)
+            {
+                await Shell.Current.DisplayAlert("Błąd", "Hasło musi mieć min. 5 znaków.", "OK");
+                return;
+            }
+
+            // 3. Sprawdzenie czy użytkownik już istnieje
+            // ZMIANA: Używamy metody GetUserByUsernameAsync (tak jak w Twoim serwisie)
             var existingUser = await _databaseService.GetUserByUsernameAsync(Username);
             if (existingUser != null)
             {
-                await Shell.Current.DisplayAlert("Błąd", "Taki użytkownik już istnieje", "OK");
+                await Shell.Current.DisplayAlert("Błąd", "Taki użytkownik już istnieje.", "OK");
                 return;
             }
 
-            // Utwórz nowego użytkownika
+            // 4. Haszowanie hasła i zapis
             var newUser = new User
             {
                 Username = Username,
-                Password = Password
+                Password = PasswordHasher.HashPassword(Password) // Haszujemy hasło!
             };
 
+            // ZMIANA: Używamy metody RegisterUserAsync (tak jak w Twoim serwisie)
             await _databaseService.RegisterUserAsync(newUser);
 
-            await Shell.Current.DisplayAlert("Sukces", "Konto utworzone! Możesz się zalogować.", "OK");
+            await Shell.Current.DisplayAlert("Sukces", "Konto utworzone", "OK");
 
-            // Wróć do ekranu logowania
+            // Czyścimy pola
+            Username = string.Empty;
+            Password = string.Empty;
+
+            // Wracamy do logowania
+            await Shell.Current.GoToAsync("..");
+        }
+
+        [RelayCommand]
+        async Task GoToLogin()
+        {
             await Shell.Current.GoToAsync("..");
         }
     }

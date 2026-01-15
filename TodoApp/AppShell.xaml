@@ -12,7 +12,6 @@
         Route="LoginPage" />
 
     <ShellContent
-        Title="Zadania"
         ContentTemplate="{DataTemplate views:TodoPage}"
         Route="TodoPage" />
 

@@ -6,90 +6,120 @@
              x:DataType="vm:SettingsViewModel"
              Title="Ustawienia">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="25" Padding="20">
+    <ScrollView HorizontalScrollBarVisibility="Never">
 
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Zmiana hasła" 
-                       TextColor="{DynamicResource Primary}" 
-                       FontSize="18" 
-                       FontAttributes="Bold" />
+        <Grid>
+            <Border StrokeThickness="0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    MaximumWidthRequest="600"
+                    Margin="20">
 
-                <Frame BackgroundColor="{DynamicResource CardBackground}" 
-                       BorderColor="Transparent" 
-                       CornerRadius="15" 
-                       Padding="20">
+                <VerticalStackLayout Spacing="25">
 
-                    <VerticalStackLayout Spacing="15">
-                        <Entry Placeholder="Nowe hasło" 
-                               Text="{Binding NewPassword}" 
-                               IsPassword="True" />
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Wygląd aplikacji" 
+                               TextColor="{DynamicResource Primary}" 
+                               FontSize="18" 
+                               FontAttributes="Bold" />
 
-                        <Button Text="Zatwierdź zmianę" 
-                                Command="{Binding ChangePasswordCommand}" />
+                        <Frame>
+                            <VerticalStackLayout Spacing="10">
+
+                                <RadioButton Content="Systemowy" Value="System" IsChecked="{Binding IsSystemTheme}">
+                                    <RadioButton.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="System"/>
+                                    </RadioButton.GestureRecognizers>
+                                </RadioButton>
+
+                                <RadioButton Content="Jasny" Value="Light" IsChecked="{Binding IsLightTheme}">
+                                    <RadioButton.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="Light"/>
+                                    </RadioButton.GestureRecognizers>
+                                </RadioButton>
+
+                                <RadioButton Content="Ciemny" Value="Dark" IsChecked="{Binding IsDarkTheme}">
+                                    <RadioButton.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="Dark"/>
+                                    </RadioButton.GestureRecognizers>
+                                </RadioButton>
+
+                            </VerticalStackLayout>
+                        </Frame>
                     </VerticalStackLayout>
-                </Frame>
-            </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Informacje o aplikacji" 
-                       TextColor="{DynamicResource Primary}" 
-                       FontSize="18" 
-                       FontAttributes="Bold" />
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Zmiana hasła" 
+                               TextColor="{DynamicResource Primary}" 
+                               FontSize="18" 
+                               FontAttributes="Bold" />
 
-                <Frame BackgroundColor="{DynamicResource CardBackground}" 
-                       BorderColor="Transparent" 
-                       CornerRadius="15" 
-                       Padding="20">
+                        <Frame>
+                            <VerticalStackLayout Spacing="15">
+                                <Entry Placeholder="Nowe hasło" 
+                                       Text="{Binding NewPassword}" 
+                                       IsPassword="True" 
+                                       HorizontalOptions="Fill"/>
 
-                    <VerticalStackLayout Spacing="12">
-                        <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="10">
-
-                            <Label Grid.Row="0" Grid.Column="0" 
-                                   Text="Wersja:" 
-                                   TextColor="{DynamicResource GrayText}" 
-                                   FontAttributes="Bold" 
-                                   WidthRequest="80"/>
-                            <Label Grid.Row="0" Grid.Column="1" 
-                                   Text="1.0.0" 
-                                   TextColor="{DynamicResource AppText}" />
-
-                            <Label Grid.Row="1" Grid.Column="0" 
-                                   Text="Autorzy:" 
-                                   TextColor="{DynamicResource GrayText}" 
-                                   FontAttributes="Bold" />
-                            <Label Grid.Row="1" Grid.Column="1" 
-                                   Text="Mariusz Mikołajczyk, Patrycja Dorszyńska" 
-                                   TextColor="{DynamicResource AppText}" />
-
-                            <Label Grid.Row="2" Grid.Column="0" 
-                                   Text="Tech:" 
-                                   TextColor="{DynamicResource GrayText}" 
-                                   FontAttributes="Bold" />
-                            <Label Grid.Row="2" Grid.Column="1" 
-                                   Text=".NET MAUI (SQLite)" 
-                                   TextColor="{DynamicResource AppText}" />
-                        </Grid>
-
-                        <BoxView HeightRequest="1" Color="{DynamicResource PrimaryDark}" Opacity="0.3" />
-
-                        <Label Text="Aplikacja do zarządzania zadaniami z lokalną bazą danych." 
-                               TextColor="{DynamicResource GrayText}" 
-                               FontSize="13" 
-                               HorizontalOptions="Center" 
-                               HorizontalTextAlignment="Center"
-                               Margin="0,5,0,0"/>
+                                <Button Text="Zatwierdź zmianę" 
+                                        Command="{Binding ChangePasswordCommand}" />
+                            </VerticalStackLayout>
+                        </Frame>
                     </VerticalStackLayout>
-                </Frame>
-                    
-            </VerticalStackLayout>
-            <Button Text="Wróć do zadań" 
-                    Command="{Binding GoBackCommand}" 
-                    Margin="0,20,0,0"
-                    BackgroundColor="{DynamicResource CardBackground}"
-                    TextColor="{DynamicResource Primary}"
-                    BorderColor="{DynamicResource Primary}"
-                    BorderWidth="1"/>
-        </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Informacje o aplikacji" 
+                               TextColor="{DynamicResource Primary}" 
+                               FontSize="18" 
+                               FontAttributes="Bold" />
+
+                        <Frame>
+                            <VerticalStackLayout Spacing="12">
+                                <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="10">
+
+                                    <Label Grid.Row="0" Grid.Column="0" 
+                                           Text="Wersja:" 
+                                           FontAttributes="Bold" 
+                                           WidthRequest="80"/>
+                                    <Label Grid.Row="0" Grid.Column="1" 
+                                           Text="{Binding AppVersion}" />
+
+                                    <Label Grid.Row="1" Grid.Column="0" 
+                                           Text="Autorzy:" 
+                                           FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="1" 
+                                           Text="Mariusz Mikołajczyk, Patrycja Dorszyńska" 
+                                           LineBreakMode="WordWrap"/>
+
+                                    <Label Grid.Row="2" Grid.Column="0" 
+                                           Text="Tech:" 
+                                           FontAttributes="Bold" />
+                                    <Label Grid.Row="2" Grid.Column="1" 
+                                           Text=".NET MAUI (SQLite)" />
+                                </Grid>
+
+                                <BoxView HeightRequest="1" Color="{DynamicResource Primary}" Opacity="0.3" />
+
+                                <Label Text="Aplikacja do zarządzania zadaniami z lokalną bazą danych." 
+                                       FontSize="13" 
+                                       HorizontalOptions="Center" 
+                                       HorizontalTextAlignment="Center"
+                                       Margin="0,5,0,0"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <Button Text="Wróć do zadań" 
+                            Command="{Binding GoBackCommand}" 
+                            Margin="0,10,0,20"
+                            BackgroundColor="Transparent"
+                            TextColor="{DynamicResource Primary}"
+                            BorderColor="{DynamicResource Primary}"
+                            BorderWidth="1"/>
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </ScrollView>
 </ContentPage>

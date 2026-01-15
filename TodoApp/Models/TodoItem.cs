@@ -19,5 +19,26 @@ namespace TodoApp.Models
 
         public DateTime DueDate { get; set; }
         public int UserId { get; set; }
+
+        // NOWE POLE: Kategoria (zapisywana w bazie)
+        public string Category { get; set; }
+
+        // NOWE POLE POMOCNICZE: Kolor (niezapisywany w bazie, obliczany w locie)
+        [Ignore]
+        public Color CategoryColor
+        {
+            get
+            {
+                return Category switch
+                {
+                    "Dom" => Color.FromArgb("#4CAF50"),      // Zielony
+                    "Praca" => Color.FromArgb("#2196F3"),    // Niebieski
+                    "Szkoła" => Color.FromArgb("#9C27B0"),   // Fioletowy
+                    "Zakupy" => Color.FromArgb("#FF9800"),   // Pomarańczowy
+                    "Inne" => Color.FromArgb("#607D8B"),     // Szary
+                    _ => Color.FromArgb("#607D8B")           // Domyślny (Szary)
+                };
+            }
+        }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TodoApp.Services;
-using TodoApp.Views; // Potrzebne do nawigacji
+using TodoApp.Views;
+using TodoApp.Helpers; // Dodane, aby widzieć PasswordHasher
 
 namespace TodoApp.ViewModels
 {
@@ -23,24 +24,39 @@ namespace TodoApp.ViewModels
         [RelayCommand]
         async Task Login()
         {
+            // 1. Walidacja: Czy pola są wypełnione?
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
-                return;
-
-            var user = await _databaseService.LoginUserAsync(Username, Password);
-
-            if (user != null)
             {
-                // ZAPAMIĘTAJ KTO JEST ZALOGOWANY
-                // Używamy wbudowanego w MAUI mechanizmu Preferences
+                await Shell.Current.DisplayAlert("Błąd", "Wprowadź login i hasło", "OK");
+                return;
+            }
+
+            // 2. Pobieramy użytkownika z bazy po samym loginie (używamy Twojej metody z DatabaseService)
+            var user = await _databaseService.GetUserByUsernameAsync(Username);
+
+            // 3. Haszujemy hasło wpisane w formularzu
+            string inputHashedPassword = PasswordHasher.HashPassword(Password);
+
+            // 4. Sprawdzamy:
+            // - Czy użytkownik istnieje? (user != null)
+            // - Czy hasz hasła z bazy zgadza się z haszem wpisanym?
+            if (user != null && user.Password == inputHashedPassword)
+            {
+                // ZALOGOWANO POMYŚLNIE
+
+                // Zapisujemy sesję
                 Preferences.Set("LoggedUserId", user.Id);
                 Preferences.Set("LoggedUserName", user.Username);
 
-                // Przejdź do głównego ekranu (TodoPage)
-                // Używamy "///" aby wyczyścić historię nawigacji (żeby strzałka wstecz nie wracała do logowania)
+                // Czyścimy pola hasła w formularzu (dla bezpieczeństwa)
+                Password = string.Empty;
+
+                // Przejdź do głównego ekranu
                 await Shell.Current.GoToAsync($"//{nameof(TodoPage)}");
             }
             else
             {
+                // Błąd logowania
                 await Shell.Current.DisplayAlert("Błąd", "Błędny login lub hasło", "OK");
             }
         }
@@ -48,7 +64,6 @@ namespace TodoApp.ViewModels
         [RelayCommand]
         async Task GoToRegister()
         {
-            // Przejdź do ekranu rejestracji
             await Shell.Current.GoToAsync(nameof(RegisterPage));
         }
     }

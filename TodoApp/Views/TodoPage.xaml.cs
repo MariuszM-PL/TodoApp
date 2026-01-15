@@ -9,6 +9,7 @@ public partial class TodoPage : ContentPage
     public TodoPage(TodoViewModel vm)
     {
         InitializeComponent();
+        //Shell.SetNavBarIsVisible(this, false);
         _viewModel = vm;
         BindingContext = _viewModel; // £¹czymy widok z logik¹
     }

@@ -16,6 +16,8 @@ namespace TodoApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    //fonts.AddFont("Montserrat-Regular.ttf", "AppFontRegular");
+                    //fonts.AddFont("Montserrat-SemiBold.ttf", "AppFontBold");
                 });
 
 #if DEBUG

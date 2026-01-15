@@ -1,14 +1,25 @@
-﻿<ResourceDictionary 
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <Color x:Key="Primary">#FFC107</Color>
-    <Color x:Key="AppBackground">#121212</Color>
-    <Color x:Key="AppText">#FFFFFF</Color>
-    <Color x:Key="CardBackground">#1E1E1E</Color>
-    <Color x:Key="GrayText">#AAAAAA</Color>
+    <Color x:Key="DeleteRed">#FF3B30</Color>
+
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>
-    <Color x:Key="Gray200">#333333</Color>
-    <Color x:Key="Gray400">#999999</Color>
+
+    <Color x:Key="LightBackground">#F5F5F7</Color>
+    <Color x:Key="LightCard">#FFFFFF</Color>
+    <Color x:Key="LightText">#1C1C1E</Color>
+    <Color x:Key="LightGrayText">#6E6E73</Color>
+    <Color x:Key="LightBorder">#AAAAAA</Color>
+
+    <Color x:Key="DarkBackground">#121212</Color>
+    <Color x:Key="DarkCard">#1E1E1E</Color>
+    <Color x:Key="DarkText">#FFFFFF</Color>
+    <Color x:Key="DarkGrayText">#AAAAAA</Color>
+
+    <Color x:Key="ButtonText">#121212</Color>
+
 </ResourceDictionary>

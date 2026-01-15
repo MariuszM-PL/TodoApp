@@ -4,8 +4,7 @@
              xmlns:vm="clr-namespace:TodoApp.ViewModels"
              xmlns:models="clr-namespace:TodoApp.Models"
              x:Class="TodoApp.Views.TodoPage"
-             x:DataType="vm:TodoViewModel"
-             Title="Moje Zadania">
+             x:DataType="vm:TodoViewModel">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Ustawienia" Command="{Binding GoToSettingsCommand}">
@@ -13,49 +12,94 @@
                 <FontImageSource Glyph="&#x2699;" Color="{DynamicResource Primary}" Size="24" FontFamily="OpenSansRegular"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-        <ToolbarItem Text="Wyloguj" Command="{Binding LogoutCommand}" Order="Primary" />
+        <ToolbarItem Text="Wyloguj" Command="{Binding LogoutCommand}" Order="Primary">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#x23FB;" Color="{DynamicResource Primary}" Size="24" FontFamily="OpenSansRegular"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto, *" Padding="20" RowSpacing="20">
+    <Grid RowDefinitions="Auto, Auto, *, Auto" Padding="20,20,20,10" RowSpacing="15">
 
         <VerticalStackLayout Grid.Row="0" Spacing="15">
             <Label Text="Nowe zadanie" FontAttributes="Bold" FontSize="20" TextColor="{DynamicResource Primary}"/>
+
             <Entry Placeholder="Tytuł zadania" Text="{Binding NewTodoTitle}" />
+
             <Editor Placeholder="Opis (opcjonalnie)" 
-                    Text="{Binding NewTodoDescription}" />
-            <DatePicker Date="{Binding NewTodoDate}" 
-                        MinimumDate="01/01/2020" 
-                        Format="dd/MM/yyyy" />
+                    Text="{Binding NewTodoDescription}" 
+                    AutoSize="TextChanges"
+                    HeightRequest="100"/>
+
+            <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween">
+                <DatePicker Date="{Binding NewTodoDate}" 
+                            MinimumDate="01/01/2020" 
+                            Format="dd/MM/yyyy"
+                            FlexLayout.Basis="48%" FlexLayout.Grow="1" Margin="0,0,5,5"/>
+
+                <Picker Title="Kategoria"
+                        ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding SelectedCategory}"
+                        FlexLayout.Basis="48%" 
+                        FlexLayout.Grow="1" 
+                        Margin="5,0,0,5"/>
+            </FlexLayout>
 
             <Button Text="Dodaj zadanie" Command="{Binding AddTaskCommand}" HeightRequest="55" Margin="0,10,0,0" />
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}" SelectionMode="None">
+        <VerticalStackLayout Grid.Row="1" Spacing="10" Margin="0,15,0,0">
+
+            <SearchBar Placeholder="Szukaj zadania..." 
+                       Text="{Binding SearchText}"/>
+
+            <ScrollView VerticalScrollBarVisibility="Never">
+                <FlexLayout BindableLayout.ItemsSource="{Binding FilterOptions}"
+                            Wrap="Wrap" Direction="Row" JustifyContent="Start" Padding="5">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:FilterOption">
+                            <Border StrokeShape="RoundRectangle 20" Padding="15,8" StrokeThickness="0" Margin="0,0,10,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=SelectFilterCommand}" CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+
+                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="14">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="TextColor" Value="{StaticResource ButtonText}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding Tasks}" 
+                        SelectionMode="None"
+                        VerticalScrollBarVisibility="Default"
+                        VerticalOptions="Fill">
+
             <CollectionView.EmptyView>
-                <Label Text="Brak zadań." HorizontalOptions="Center" VerticalOptions="Center" TextColor="{DynamicResource Gray400}" FontSize="18"/>
+                <Label Text="Brak zadań." HorizontalOptions="Center" VerticalOptions="Center" Opacity="0.5" FontSize="18"/>
             </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:TodoItem">
                     <Frame Margin="0,8">
                         <Grid ColumnDefinitions="Auto, *, Auto, Auto" ColumnSpacing="10" VerticalOptions="Center">
-
-                            <Border Grid.Column="0" 
-                                    HeightRequest="24" 
-                                    WidthRequest="24" 
-                                    StrokeShape="RoundRectangle 12" 
-                                    Stroke="{DynamicResource Primary}" 
-                                    StrokeThickness="2" 
-                                    BackgroundColor="Transparent"
-                                    VerticalOptions="Center" 
-                                    HorizontalOptions="Center">
-
+                            <Border Grid.Column="0" HeightRequest="24" WidthRequest="24" StrokeShape="RoundRectangle 12" Stroke="{DynamicResource Primary}" StrokeThickness="2" BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Center">
                                 <Border.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=ToggleDoneCommand}" 
-                                        CommandParameter="{Binding .}"/>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=ToggleDoneCommand}" CommandParameter="{Binding .}"/>
                                 </Border.GestureRecognizers>
-
                                 <Border.Triggers>
                                     <DataTrigger TargetType="Border" Binding="{Binding IsDone}" Value="True">
                                         <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
@@ -63,21 +107,25 @@
                                 </Border.Triggers>
                             </Border>
 
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                <Border BackgroundColor="{Binding CategoryColor}" StrokeShape="RoundRectangle 5" HorizontalOptions="Start" Padding="8,2" StrokeThickness="0">
+                                    <Label Text="{Binding Category}" FontSize="10" TextColor="White" FontAttributes="Bold"/>
+                                </Border>
+
                                 <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsDone}" Value="True">
                                             <Setter Property="TextDecorations" Value="Strikethrough" />
-                                            <Setter Property="TextColor" Value="{DynamicResource Gray400}" />
+                                            <Setter Property="Opacity" Value="0.4" />
                                         </DataTrigger>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsDone}" Value="False">
                                             <Setter Property="TextDecorations" Value="None" />
-                                            <Setter Property="TextColor" Value="{DynamicResource AppText}" />
+                                            <Setter Property="Opacity" Value="1.0" />
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
 
-                                <Label FontSize="12" TextColor="{DynamicResource GrayText}">
+                                <Label FontSize="12" Opacity="0.7">
                                     <Label.FormattedText>
                                         <FormattedString>
                                             <Span Text="{Binding Description}" />
@@ -88,33 +136,31 @@
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsDone}" Value="True">
                                             <Setter Property="TextDecorations" Value="Strikethrough" />
-                                            <Setter Property="TextColor" Value="{DynamicResource Gray400}" />
+                                            <Setter Property="Opacity" Value="0.4" />
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>
                             </VerticalStackLayout>
 
-                            <ImageButton Grid.Column="2" 
-                                         Source="{FontImageSource Glyph='&#x270F;', Color={DynamicResource Primary}, Size=20}"
-                                         BackgroundColor="Transparent"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=TapCommand}"
-                                         CommandParameter="{Binding .}" 
-                                         VerticalOptions="Center"
-                                         HeightRequest="40" 
-                                         WidthRequest="40"/>
-
-                            <ImageButton Grid.Column="3" 
-                                         Source="{FontImageSource Glyph='&#x1F5D1;', Color={DynamicResource Gray400}, Size=20}"
-                                         BackgroundColor="Transparent"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=DeleteTaskCommand}"
-                                         CommandParameter="{Binding .}" 
-                                         VerticalOptions="Center"
-                                         HeightRequest="40" 
-                                         WidthRequest="40"/>
+                            <ImageButton Grid.Column="2" Source="{FontImageSource Glyph='&#x270F;', Color={DynamicResource Primary}, Size=20}" BackgroundColor="Transparent" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=TapCommand}" CommandParameter="{Binding .}" VerticalOptions="Center" HeightRequest="40" WidthRequest="40"/>
+                            <ImageButton Grid.Column="3" Source="{FontImageSource Glyph='&#x1F5D1;', Color={DynamicResource DeleteRed}, Size=20}" BackgroundColor="Transparent" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=DeleteTaskCommand}" CommandParameter="{Binding .}" VerticalOptions="Center" HeightRequest="40" WidthRequest="40"/>
                         </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <VerticalStackLayout Grid.Row="3" Spacing="2" Padding="0,5,0,10">
+            <Image Source="logo.png" 
+                   HeightRequest="30" 
+                   Opacity="0.3" 
+                   HorizontalOptions="Center"/>
+
+            <Label Text="Twoje zadania" 
+                   FontSize="10" 
+                   HorizontalOptions="Center"
+                   Opacity="0.5"/>
+        </VerticalStackLayout>
+
     </Grid>
 </ContentPage>

@@ -1,24 +1,83 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TodoApp.ViewModels"
              x:Class="TodoApp.Views.EditPage"
+             x:DataType="vm:EditViewModel"
              Title="Edytuj zadanie">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Tytuł:" FontAttributes="Bold"/>
-        <Entry Text="{Binding TodoItem.Title}" />
+    <ScrollView HorizontalScrollBarVisibility="Never">
 
-        <Label Text="Opis:" FontAttributes="Bold"/>
-        <Editor Text="{Binding TodoItem.Description}" />
+        <Grid>
+            <Border StrokeThickness="0"
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    MaximumWidthRequest="600"
+                    Margin="20">
+                <VerticalStackLayout Spacing="20">
 
-        <Label Text="Termin:" FontAttributes="Bold"/>
+                    <Label Text="Edycja zadania" 
+                           FontSize="22" 
+                           FontAttributes="Bold" 
+                           TextColor="{DynamicResource Primary}"/>
 
-        <DatePicker Date="{Binding TodoItem.DueDate}" 
-                    Format="dd/MM/yyyy" />
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Tytuł:" FontAttributes="Bold"/>
+                        <Entry Text="{Binding TodoItem.Title}" HorizontalOptions="Fill" />
+                    </VerticalStackLayout>
 
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,20,0,0">
-            <Button Text="Zapisz zmiany" Command="{Binding UpdateTaskCommand}" Grid.Column="0"/>
-            <Button Text="Anuluj" Command="{Binding CancelCommand}" BackgroundColor="Gray" Grid.Column="1"/>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Opis:" FontAttributes="Bold"/>
+                        <Editor Text="{Binding TodoItem.Description}" 
+                                AutoSize="TextChanges" 
+                                HeightRequest="100"
+                                HorizontalOptions="Fill"/>
+                    </VerticalStackLayout>
+
+                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween">
+
+                        <VerticalStackLayout Spacing="5"
+                                             FlexLayout.Basis="48%" 
+                                             FlexLayout.Grow="1" 
+                                             Margin="0,0,5,10"
+                                             MinimumWidthRequest="100">
+                            <Label Text="Termin:" FontAttributes="Bold"/>
+                            <DatePicker Date="{Binding TodoItem.DueDate}" 
+                                        Format="dd/MM/yyyy" 
+                                        HorizontalOptions="Fill"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5"
+                                             FlexLayout.Basis="48%" 
+                                             FlexLayout.Grow="1" 
+                                             Margin="5,0,0,10"
+                                             MinimumWidthRequest="100">
+                            <Label Text="Kategoria:" FontAttributes="Bold"/>
+
+                            <Picker ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding TodoItem.Category}"
+                                    Title="Wybierz"
+                                    HorizontalOptions="Fill"/>
+                        </VerticalStackLayout>
+                    </FlexLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,0">
+                        <Button Grid.Column="0" 
+                                Text="Zapisz zmiany" 
+                                Command="{Binding UpdateTaskCommand}"/>
+
+                        <Button Grid.Column="1" 
+                                Text="Anuluj" 
+                                Command="{Binding CancelCommand}" 
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource Primary}"
+                                BorderColor="{DynamicResource Primary}"
+                                BorderWidth="1"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
         </Grid>
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

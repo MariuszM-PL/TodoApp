@@ -13,22 +13,91 @@ namespace TodoApp.ViewModels
         // Lista zadań widoczna na ekranie
         public ObservableCollection<TodoItem> Tasks { get; } = new();
 
+        // Lista opcji filtrowania
+        public ObservableCollection<FilterOption> FilterOptions { get; } = new();
+
+        // Ukryta lista (cache) wszystkich zadań
+        private List<TodoItem> _allTasks = new();
+
+        // --- NOWOŚĆ: Pole wyszukiwania ---
+        [ObservableProperty]
+        string searchText;
+
+        // Ta metoda uruchomi się automatycznie, gdy wpiszesz choćby jedną literę (dzięki CommunityToolkit)
+        partial void OnSearchTextChanged(string value)
+        {
+            ApplyFilter();
+        }
+
         // Pola formularza
         [ObservableProperty]
         string newTodoTitle;
 
         [ObservableProperty]
-        string newTodoDescription; // <--- NOWE: Pole na opis
+        string newTodoDescription;
 
         [ObservableProperty]
-        DateTime newTodoDate = DateTime.Now; // Domyślna data to "dzisiaj"
+        DateTime newTodoDate = DateTime.Now;
+
+        // Lista kategorii
+        public List<string> Categories { get; } = new()
+        {
+            "Dom", "Praca", "Szkoła", "Zakupy", "Inne"
+        };
+
+        // Wybrana kategoria
+        [ObservableProperty]
+        string selectedCategory = "Inne";
 
         public TodoViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
+            InitializeFilters();
         }
 
-        // Uruchamiane przy starcie ekranu
+        void InitializeFilters()
+        {
+            FilterOptions.Clear();
+            FilterOptions.Add(new FilterOption { Name = "Wszystkie", IsSelected = true });
+
+            foreach (var cat in Categories)
+            {
+                FilterOptions.Add(new FilterOption { Name = cat, IsSelected = false });
+            }
+        }
+
+        [RelayCommand]
+        void SelectFilter(FilterOption selectedOption)
+        {
+            foreach (var option in FilterOptions) option.IsSelected = false;
+            selectedOption.IsSelected = true;
+            ApplyFilter();
+        }
+
+        // --- ZMODYFIKOWANE FILTROWANIE ---
+        void ApplyFilter()
+        {
+            var activeFilter = FilterOptions.FirstOrDefault(f => f.IsSelected)?.Name;
+
+            Tasks.Clear();
+            foreach (var task in _allTasks)
+            {
+                // Warunek 1: Czy pasuje kategoria?
+                bool categoryMatches = (activeFilter == "Wszystkie" || task.Category == activeFilter);
+
+                // Warunek 2: Czy pasuje tekst szukania? (ignorujemy wielkość liter)
+                // Jeśli SearchText jest pusty, to zwracamy true (pasuje wszystko)
+                bool searchMatches = string.IsNullOrWhiteSpace(SearchText)
+                                     || task.Title.Contains(SearchText, StringComparison.OrdinalIgnoreCase);
+
+                // Dodajemy tylko jeśli OBA warunki są spełnione
+                if (categoryMatches && searchMatches)
+                {
+                    Tasks.Add(task);
+                }
+            }
+        }
+
         [RelayCommand]
         async Task LoadTasks()
         {
@@ -37,51 +106,50 @@ namespace TodoApp.ViewModels
 
             var tasksFromDb = await _databaseService.GetTodosForUserAsync(userId);
 
-            // NOWOŚĆ: Sortowanie (OrderBy)
-            // Układa zadania od najstarszej daty (najbliższy termin) do najnowszej
-            var sortedTasks = tasksFromDb.OrderBy(t => t.DueDate).ToList();
-
-            Tasks.Clear();
-            foreach (var task in sortedTasks)
-            {
-                Tasks.Add(task);
-            }
+            _allTasks = tasksFromDb.OrderBy(t => t.DueDate).ToList();
+            ApplyFilter();
         }
 
-        // Ta metoda zadziała, gdy klikniesz w zadanie (żeby je edytować)
         [RelayCommand]
         async Task Tap(TodoItem task)
         {
             if (task == null) return;
 
-            // Przechodzimy do strony edycji i przekazujemy jej kliknięte zadanie
             var navigationParameter = new Dictionary<string, object>
-    {
-        { "TaskObj", task }
-    };
+            {
+                { "TaskObj", task }
+            };
             await Shell.Current.GoToAsync(nameof(Views.EditPage), navigationParameter);
         }
 
-        // Ta metoda zadziała, gdy klikniesz Checkbox (Zrobione/Niezrobione)
         [RelayCommand]
         async Task ToggleDone(TodoItem task)
         {
             if (task == null) return;
 
-            // <--- NAPRAWA: Musimy ręcznie odwrócić wartość (zrobione <-> niezrobione)
             task.IsDone = !task.IsDone;
-
-            // Teraz zapisujemy nową wartość do bazy
             await _databaseService.SaveTodoAsync(task);
+
+            // Opcjonalnie: Przeładowujemy, żeby zaktualizować wygląd (np. przekreślenie)
+            // Ale w Twoim kodzie XAML masz Triggers, więc powinno działać od razu.
+            // Jeśli chcesz, by zadania "wskakiwały" na inne miejsce po zrobieniu, tu można dać LoadTasks().
         }
 
-        // Dodawanie zadania
         [RelayCommand]
         async Task AddTask()
         {
-            if (string.IsNullOrWhiteSpace(NewTodoTitle)) return;
+            if (string.IsNullOrWhiteSpace(NewTodoTitle))
+            {
+                await Shell.Current.DisplayAlert("Błąd", "Wpisz tytuł zadania!", "OK");
+                return;
+            }
 
             int userId = Preferences.Get("LoggedUserId", -1);
+            if (userId == -1)
+            {
+                await Shell.Current.GoToAsync($"//{nameof(Views.LoginPage)}");
+                return;
+            }
 
             var newTask = new TodoItem
             {
@@ -89,38 +157,38 @@ namespace TodoApp.ViewModels
                 Description = NewTodoDescription,
                 DueDate = NewTodoDate,
                 IsDone = false,
-                UserId = userId
+                UserId = userId,
+                Category = SelectedCategory
             };
 
             await _databaseService.SaveTodoAsync(newTask);
-
-            // ZMIANA: Zamiast po prostu dodawać na koniec (Tasks.Add),
-            // wywołujemy LoadTasks(), żeby odświeżyć listę i zachować sortowanie.
             await LoadTasks();
 
-            // Reset pól
             NewTodoTitle = string.Empty;
             NewTodoDescription = string.Empty;
             NewTodoDate = DateTime.Now;
+            SelectedCategory = "Inne";
         }
 
-        // Usuwanie zadania
         [RelayCommand]
-        async Task DeleteTask(TodoItem task)
+        async Task DeleteTask(TodoItem item)
         {
-            if (task == null) return;
-            await _databaseService.DeleteTodoAsync(task);
-            Tasks.Remove(task);
+            if (item == null) return;
+
+            bool answer = await Shell.Current.DisplayAlert("Usuwanie", "Czy na pewno usunąć?", "Tak", "Nie");
+            if (!answer) return;
+
+            await _databaseService.DeleteTodoAsync(item);
+            _allTasks.Remove(item);
+            ApplyFilter();
         }
 
-        // Ustawienia
         [RelayCommand]
         async Task GoToSettings()
         {
             await Shell.Current.GoToAsync(nameof(Views.SettingsPage));
         }
 
-        // Wylogowanie
         [RelayCommand]
         async Task Logout()
         {

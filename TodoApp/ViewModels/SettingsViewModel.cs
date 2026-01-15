@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using TodoApp.Services;
+using TodoApp.Helpers; // Potrzebne do haszowania hasła
 
 namespace TodoApp.ViewModels
 {
@@ -9,16 +10,41 @@ namespace TodoApp.ViewModels
         private readonly DatabaseService _databaseService;
 
         [ObservableProperty]
-        string newPassword; // Pole na nowe hasło
+        string newPassword;
 
         [ObservableProperty]
         string appVersion = "1.0.0";
 
+        // --- POLA DO OBSŁUGI MOTYWU ---
+        [ObservableProperty]
+        bool isSystemTheme;
+
+        [ObservableProperty]
+        bool isLightTheme;
+
+        [ObservableProperty]
+        bool isDarkTheme;
+
         public SettingsViewModel(DatabaseService databaseService)
         {
             _databaseService = databaseService;
+
+            // Ustawiamy kółeczka motywu przy wejściu
+            var currentTheme = Preferences.Get("AppTheme", "System");
+            IsSystemTheme = currentTheme == "System";
+            IsLightTheme = currentTheme == "Light";
+            IsDarkTheme = currentTheme == "Dark";
         }
 
+        // --- ZMIANA MOTYWU ---
+        [RelayCommand]
+        void ChangeTheme(string themeName)
+        {
+            Preferences.Set("AppTheme", themeName);
+            App.ApplyTheme();
+        }
+
+        // --- ZMIANA HASŁA ---
         [RelayCommand]
         async Task ChangePassword()
         {
@@ -28,30 +54,30 @@ namespace TodoApp.ViewModels
                 return;
             }
 
-            // Pobierz ID aktualnego użytkownika
             int userId = Preferences.Get("LoggedUserId", -1);
             string username = Preferences.Get("LoggedUserName", "");
 
             if (userId != -1)
             {
-                // Aktualizujemy użytkownika w bazie
                 var userToUpdate = new Models.User
                 {
                     Id = userId,
                     Username = username,
-                    Password = NewPassword // Zapisujemy nowe hasło
+                    // Haszujemy nowe hasło
+                    Password = PasswordHasher.HashPassword(NewPassword)
                 };
 
+                // ZMIANA: Używamy UpdateUserAsync, bo ta metoda jest w Twoim DatabaseService
                 await _databaseService.UpdateUserAsync(userToUpdate);
+
                 await Shell.Current.DisplayAlert("Sukces", "Hasło zostało zmienione", "OK");
-                NewPassword = string.Empty; // Czyścimy pole
+                NewPassword = string.Empty;
             }
         }
 
         [RelayCommand]
         async Task GoBack()
         {
-            // ".." oznacza: cofnij się do poprzedniej strony
             await Shell.Current.GoToAsync("..");
         }
     }

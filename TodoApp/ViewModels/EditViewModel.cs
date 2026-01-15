@@ -5,7 +5,7 @@ using TodoApp.Services;
 
 namespace TodoApp.ViewModels
 {
-    // QueryProperty pozwala odebrać dane przesłane z poprzedniego ekranu
+    // QueryProperty odbiera obiekt zadania przekazany z listy
     [QueryProperty(nameof(TodoItem), "TaskObj")]
     public partial class EditViewModel : ObservableObject
     {
@@ -13,6 +13,11 @@ namespace TodoApp.ViewModels
 
         [ObservableProperty]
         TodoItem todoItem;
+
+        public List<string> Categories { get; } = new()
+        {
+            "Dom", "Praca", "Szkoła", "Zakupy", "Inne"
+        };
 
         public EditViewModel(DatabaseService databaseService)
         {
@@ -22,14 +27,29 @@ namespace TodoApp.ViewModels
         [RelayCommand]
         async Task UpdateTask()
         {
+            // Zabezpieczenie przed nullem
+            if (TodoItem == null) return;
+
+            // --- WALIDACJA (Punkt B) ---
+            // Sprawdzamy, czy tytuł nie został wyczyszczony
+            if (string.IsNullOrWhiteSpace(TodoItem.Title))
+            {
+                await Shell.Current.DisplayAlert("Błąd", "Tytuł zadania nie może być pusty!", "OK");
+                return; // Przerywamy funkcję, nie zapisujemy w bazie
+            }
+
+            // Jeśli jest OK, zapisujemy zmiany w bazie
             await _databaseService.SaveTodoAsync(TodoItem);
-            await Shell.Current.GoToAsync(".."); // Wróć do listy
+
+            // Wracamy do poprzedniego ekranu
+            await Shell.Current.GoToAsync("..");
         }
 
         [RelayCommand]
         async Task Cancel()
         {
-            await Shell.Current.GoToAsync(".."); // Wróć bez zapisywania
+            // Wracamy bez zapisywania
+            await Shell.Current.GoToAsync("..");
         }
     }
 }
