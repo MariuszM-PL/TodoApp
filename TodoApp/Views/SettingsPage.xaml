@@ -7,7 +7,6 @@
              Title="Ustawienia">
 
     <ScrollView HorizontalScrollBarVisibility="Never">
-
         <Grid>
             <Border StrokeThickness="0"
                     BackgroundColor="Transparent"
@@ -19,105 +18,73 @@
                 <VerticalStackLayout Spacing="25">
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Wygląd aplikacji" 
-                               TextColor="{DynamicResource Primary}" 
-                               FontSize="18" 
-                               FontAttributes="Bold" />
-
-                        <Frame>
+                        <Label Text="Wygląd aplikacji" TextColor="{DynamicResource Primary}" FontSize="18" FontAttributes="Bold" />
+                        <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}" BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#2B2B2B}">
                             <VerticalStackLayout Spacing="10">
-
                                 <RadioButton Content="Systemowy" Value="System" IsChecked="{Binding IsSystemTheme}">
                                     <RadioButton.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="System"/>
                                     </RadioButton.GestureRecognizers>
                                 </RadioButton>
-
                                 <RadioButton Content="Jasny" Value="Light" IsChecked="{Binding IsLightTheme}">
                                     <RadioButton.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="Light"/>
                                     </RadioButton.GestureRecognizers>
                                 </RadioButton>
-
                                 <RadioButton Content="Ciemny" Value="Dark" IsChecked="{Binding IsDarkTheme}">
                                     <RadioButton.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChangeThemeCommand}" CommandParameter="Dark"/>
                                     </RadioButton.GestureRecognizers>
                                 </RadioButton>
-
                             </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Zmiana hasła" 
-                               TextColor="{DynamicResource Primary}" 
-                               FontSize="18" 
-                               FontAttributes="Bold" />
-
-                        <Frame>
+                        <Label Text="Zmiana hasła" TextColor="{DynamicResource Primary}" FontSize="18" FontAttributes="Bold" />
+                        <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}" BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#2B2B2B}">
                             <VerticalStackLayout Spacing="15">
                                 <Entry Placeholder="Nowe hasło" 
                                        Text="{Binding NewPassword}" 
                                        IsPassword="True" 
-                                       HorizontalOptions="Fill"/>
-
-                                <Button Text="Zatwierdź zmianę" 
-                                        Command="{Binding ChangePasswordCommand}" />
+                                       HorizontalOptions="Fill"
+                                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                       BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                                <Button Text="Zatwierdź zmianę" Command="{Binding ChangePasswordCommand}" />
                             </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="Informacje o aplikacji" 
-                               TextColor="{DynamicResource Primary}" 
-                               FontSize="18" 
-                               FontAttributes="Bold" />
-
-                        <Frame>
+                        <Label Text="Informacje o aplikacji" TextColor="{DynamicResource Primary}" FontSize="18" FontAttributes="Bold" />
+                        <Frame BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}" BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#2B2B2B}">
                             <VerticalStackLayout Spacing="12">
                                 <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="10">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="Wersja:" FontAttributes="Bold" WidthRequest="80"/>
+                                    <Label Grid.Row="0" Grid.Column="1" Text="{Binding AppVersion}" />
 
-                                    <Label Grid.Row="0" Grid.Column="0" 
-                                           Text="Wersja:" 
-                                           FontAttributes="Bold" 
-                                           WidthRequest="80"/>
-                                    <Label Grid.Row="0" Grid.Column="1" 
-                                           Text="{Binding AppVersion}" />
+                                    <Label Grid.Row="1" Grid.Column="0" Text="Autorzy:" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="1" Text="Mariusz Mikołajczyk, Patrycja Dorszyńska" LineBreakMode="WordWrap"/>
 
-                                    <Label Grid.Row="1" Grid.Column="0" 
-                                           Text="Autorzy:" 
-                                           FontAttributes="Bold" />
-                                    <Label Grid.Row="1" Grid.Column="1" 
-                                           Text="Mariusz Mikołajczyk, Patrycja Dorszyńska" 
-                                           LineBreakMode="WordWrap"/>
-
-                                    <Label Grid.Row="2" Grid.Column="0" 
-                                           Text="Tech:" 
-                                           FontAttributes="Bold" />
-                                    <Label Grid.Row="2" Grid.Column="1" 
-                                           Text=".NET MAUI (SQLite)" />
+                                    <Label Grid.Row="2" Grid.Column="0" Text="Tech:" FontAttributes="Bold" />
+                                    <Label Grid.Row="2" Grid.Column="1" Text=".NET MAUI (SQLite)" />
                                 </Grid>
 
                                 <BoxView HeightRequest="1" Color="{DynamicResource Primary}" Opacity="0.3" />
 
                                 <Label Text="Aplikacja do zarządzania zadaniami z lokalną bazą danych." 
-                                       FontSize="13" 
-                                       HorizontalOptions="Center" 
-                                       HorizontalTextAlignment="Center"
-                                       Margin="0,5,0,0"/>
+                                       FontSize="13" HorizontalOptions="Center" HorizontalTextAlignment="Center" Margin="0,5,0,0"/>
                             </VerticalStackLayout>
                         </Frame>
                     </VerticalStackLayout>
 
                     <Button Text="Wróć do zadań" 
                             Command="{Binding GoBackCommand}" 
-                            Margin="0,10,0,20"
+                            Margin="0,10,0,20" 
                             BackgroundColor="Transparent"
-                            TextColor="{DynamicResource Primary}"
-                            BorderColor="{DynamicResource Primary}"
+                            TextColor="{DynamicResource Primary}" 
+                            BorderColor="{DynamicResource Primary}" 
                             BorderWidth="1"/>
-
                 </VerticalStackLayout>
             </Border>
         </Grid>

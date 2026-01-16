@@ -9,51 +9,52 @@
 
     <ScrollView HorizontalScrollBarVisibility="Never">
         <Grid>
-            <Border StrokeThickness="0"
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    MaximumWidthRequest="400"
+            <Border StrokeThickness="0" 
+                    BackgroundColor="Transparent" 
+                    HorizontalOptions="Center" 
+                    VerticalOptions="Center" 
+                    MaximumWidthRequest="400" 
                     Margin="30">
 
                 <VerticalStackLayout Spacing="25">
 
                     <Image Source="logo.png" 
                            HeightRequest="160" 
-                           HorizontalOptions="Center"
+                           HorizontalOptions="Center" 
                            Aspect="AspectFit" />
 
                     <Label Text="Witaj w TodoApp!" 
-                           Margin="0, -10, 0, 0"
                            FontSize="28" 
-                           FontAttributes="Bold"
-                           HorizontalOptions="Center"
-                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center" 
                            TextColor="{DynamicResource Primary}" />
 
                     <VerticalStackLayout Spacing="15">
-                        <Entry Placeholder="Nazwa użytkownika"
+                        <Entry Placeholder="Nazwa użytkownika" 
                                Text="{Binding Username}" 
-                               HorizontalOptions="Fill"/>
+                               HorizontalOptions="Fill"
+                               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                               BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
 
-                        <Entry Placeholder="Hasło"
-                               IsPassword="True"
+                        <Entry Placeholder="Hasło" 
+                               IsPassword="True" 
                                Text="{Binding Password}" 
-                               HorizontalOptions="Fill"/>
+                               HorizontalOptions="Fill"
+                               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                               BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="10" Margin="0,10,0,0">
-                        <Button Text="Zaloguj się"
-                                Command="{Binding LoginCommand}"
-                                HeightRequest="55"
-                                FontSize="18"
-                                HorizontalOptions="Fill"/>
+                        <Button Text="Zaloguj się" 
+                                Command="{Binding LoginCommand}" 
+                                HeightRequest="55" 
+                                FontSize="18" />
 
-                        <Button Text="Nie masz konta? Zarejestruj się"
-                                Command="{Binding GoToRegisterCommand}"
-                                BackgroundColor="Transparent"
-                                TextColor="{DynamicResource Primary}"
-                                FontSize="14"
+                        <Button Text="Nie masz konta? Zarejestruj się" 
+                                Command="{Binding GoToRegisterCommand}" 
+                                BackgroundColor="Transparent" 
+                                TextColor="{DynamicResource Primary}" 
+                                FontSize="14" 
                                 HorizontalOptions="Center"/>
                     </VerticalStackLayout>
 
