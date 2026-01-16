@@ -9,7 +9,6 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		
 		<ApplicationTitle>TodoApp</ApplicationTitle>
 
 		<ApplicationId>com.companyname.todoapp</ApplicationId>
