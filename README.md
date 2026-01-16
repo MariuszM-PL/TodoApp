@@ -1,28 +1,47 @@
 ﻿# 📝 TodoApp - .NET MAUI Task Manager
 
-Nowoczesna aplikacja mobilna i desktopowa do zarządzania zadaniami, zbudowana w technologii **.NET MAUI** z lokalną bazą danych.
+Nowoczesna aplikacja desktopowa i mobilna do zarządzania zadaniami, zbudowana w technologii **.NET MAUI** z naciskiem na architekturę MVVM oraz bezpieczeństwo danych.
 
-## ✨ Funkcje
-* **🛡️ Bezpieczeństwo**: Rejestracja i logowanie użytkowników z haszowaniem haseł (SHA-256).
-* **🗄️ Lokalna Baza Danych**: Wykorzystanie **SQLite** do przechowywania zadań i danych użytkowników.
-* **🎨 Personalizacja**: Pełne wsparcie dla motywu **Jasnego** i **Ciemnego** (Auto/Light/Dark).
-* **🔍 Wyszukiwanie i Filtry**: Błyskawiczne filtrowanie zadań po nazwie oraz kategoriach (Dom, Praca, Szkoła itd.).
-* **📅 Planowanie**: Możliwość ustawiania terminów zadań.
-* **📱 Responsywność**: Aplikacja zoptymalizowana pod Windows oraz Android.
+## 🚀 Najnowsze Funkcje (Wersja 1.1)
 
-## 🛠️ Technologie
-* **Język**: C#
+* **🔔 Autorski System Powiadomień In-App**: Własny mechanizm "Toast Notification" z animacjami, który przypomina o nadchodzących terminach w czasie rzeczywistym.
+* **🔊 Powiadomienia Dźwiękowe**: Integracja audio informująca użytkownika o zbliżającym się terminie zadania.
+* **🛡️ Zaawansowane Bezpieczeństwo**: Pełne haszowanie haseł algorytmem **SHA-256** przed zapisem do bazy danych.
+* **🖥️ Desktop Optimization**: Mechanizm automatycznego centrowania okna i blokada minimalnych wymiarów dla systemów Windows.
+
+## ✨ Standardowe Funkcje
+* **🗄️ Lokalna Baza Danych**: Wykorzystanie **SQLite** z asynchronicznym dostępem do danych.
+* **🎨 Personalizacja**: Dynamiczna zmiana motywów (Jasny/Ciemny/Systemowy) działająca w czasie rzeczywistym.
+* **🔍 Wyszukiwanie i Filtry**: Zaawansowane filtrowanie po nazwie, opisie oraz kategoriach.
+* **🏷️ System Kategorii**: Dynamiczne przypisywanie kolorów do kategorii (Dom, Praca, Szkoła, Zakupy).
+* **📅 Planowanie**: Precyzyjne ustawianie daty i godziny zakończenia zadania.
+
+## 🛠️ Stack Technologiczny
 * **Framework**: .NET 8 (MAUI)
-* **Wzorzec**: MVVM (CommunityToolkit.Mvvm)
+* **Wzorzec projektowy**: MVVM (CommunityToolkit.Mvvm)
 * **Baza danych**: SQLite-net-pcl
-* **Czcionka**: Open Sans (Modern UI)
+* **Audio**: Plugin.Maui.Audio
+* **Dokumentacja**: Pełna dokumentacja XML zgodna ze standardami C#
 
-## 📸 Wygląd
-Aplikacja posiada nowoczesny interfejs z kafelkowym układem zadań, dynamicznymi kolorami kategorii oraz intuicyjnym systemem edycji.
+
+
+## 🏗️ Architektura Projektu
+Projekt został podzielony zgodnie z dobrymi praktykami programistycznymi:
+* `Models/` - Definicje danych i tabele bazy danych.
+* `ViewModels/` - Logika biznesowa i obsługa zdarzeń.
+* `Views/` - Warstwa interfejsu (XAML).
+* `Services/` - Zarządzanie bazą danych i logiką audio.
+* `Helpers/` - Narzędzia pomocnicze (haszowanie haseł).
+
+## 📥 Uruchomienie projektu
+1. Sklonuj repozytorium: `git clone https://github.com/TwojLogin/TodoApp.git`
+2. Otwórz plik `TodoApp.sln` w **Visual Studio 2022**.
+3. Upewnij się, że masz zainstalowane obciążenie (workload) `.NET MAUI`.
+4. Wybierz cel `Windows Machine` lub `Android Emulator` i uruchom projekt (F5).
 
 ---
-*Projekt stworzony w celach edukacyjnych.*
+### 👥 Autorzy
+* **Mariusz Mikołajczyk**
+* **Patrycja Dorszyńska**
 
-Mariusz Mikołajczyk
-
-Patrycja Dorszyńska
+*Projekt stworzony w celach edukacyjnych na zaliczenie przedmiotu.*
