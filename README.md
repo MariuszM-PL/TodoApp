@@ -23,7 +23,6 @@ Nowoczesna aplikacja desktopowa do zarządzania zadaniami, zbudowana w technolog
 * **Wzorzec projektowy**: MVVM (CommunityToolkit.Mvvm)
 * **Baza danych**: SQLite-net-pcl (lokalny plik `.db`)
 * **Audio**: Plugin.Maui.Audio
-* **Dokumentacja**: Pełna dokumentacja techniczna XML (<summary>)
 
 ## 🏗️ Struktura Projektu
 * `Models/` - Modele danych i schematy bazy SQLite.
