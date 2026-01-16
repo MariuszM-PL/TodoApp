@@ -10,7 +10,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<ApplicationTitle>TodoApp</ApplicationTitle>
-
+		
 		<ApplicationId>com.companyname.todoapp</ApplicationId>
 
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -47,6 +47,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Views\AddPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\EditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

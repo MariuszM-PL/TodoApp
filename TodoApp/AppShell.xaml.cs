@@ -23,6 +23,9 @@ namespace TodoApp
 
             // Trasa do strony ustawień - pozwala na nawigację do opcji konfiguracji aplikacji.
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+
+            // Trasa do strony dodawania nowego zadania.
+            Routing.RegisterRoute(nameof(AddPage), typeof(AddPage));
         }
     }
 }

@@ -2,39 +2,37 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:TodoApp.ViewModels"
-             x:Class="TodoApp.Views.EditPage"
-             x:DataType="vm:EditViewModel"
-             Title="Edytuj zadanie"
-             Shell.FlyoutBehavior="Disabled"
-             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
+             x:Class="TodoApp.Views.AddPage"
+             x:DataType="vm:TodoViewModel"
+             Title="Nowe zadanie"
+             Shell.FlyoutBehavior="Disabled">
 
     <ScrollView HorizontalScrollBarVisibility="Never">
         <FlexLayout Direction="Column" JustifyContent="Start" AlignItems="Stretch" Padding="20">
 
             <Border StrokeThickness="0" BackgroundColor="Transparent" MaximumWidthRequest="800" HorizontalOptions="Center">
-
                 <VerticalStackLayout Spacing="20">
-                    <Label Text="Edycja zadania" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+                    <Label Text="Dodawanie nowego zadania" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Tytuł:" FontAttributes="Bold"/>
-                        <Entry Text="{Binding TodoItem.Title}" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                        <Label Text="Tytuł zadania:" FontAttributes="Bold"/>
+                        <Entry Text="{Binding NewTodoTitle}" Placeholder="Wpisz tytuł..." BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Opis:" FontAttributes="Bold"/>
-                        <Editor Text="{Binding TodoItem.Description}" AutoSize="TextChanges" MinimumHeightRequest="100" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                        <Label Text="Opis (opcjonalnie):" FontAttributes="Bold"/>
+                        <Editor Text="{Binding NewTodoDescription}" Placeholder="Wpisz szczegóły..." AutoSize="TextChanges" MinimumHeightRequest="100" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="15">
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Termin:" FontAttributes="Bold"/>
-                            <DatePicker Date="{Binding TodoItem.DueDate}" Format="dd/MM/yyyy" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                            <DatePicker Date="{Binding NewTodoDate}" Format="dd/MM/yyyy" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                         </VerticalStackLayout>
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Godzina:" FontAttributes="Bold"/>
-                            <TimePicker Time="{Binding EditTodoTime}" 
+                            <TimePicker Time="{Binding NewTodoTime}" 
                                         Format="HH:mm"
                                         TextColor="{AppThemeBinding Light=Black, Dark=White}"
                                         BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
@@ -42,16 +40,13 @@
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Kategoria:" FontAttributes="Bold"/>
-                            <Picker ItemsSource="{Binding Categories}" 
-                                    SelectedItem="{Binding TodoItem.Category, Mode=TwoWay}" 
-                                    Title="Wybierz kategorię" 
-                                    BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                            <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" Title="Wybierz kategorię" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="10" Margin="0,10,0,0">
-                        <Button Text="Zapisz zmiany" Command="{Binding UpdateTaskCommand}" HeightRequest="55" CornerRadius="12" FontAttributes="Bold"/>
-                        <Button Text="Anuluj" Command="{Binding CancelCommand}" BackgroundColor="Transparent" TextColor="{DynamicResource Primary}" BorderColor="{DynamicResource Primary}" BorderWidth="2" HeightRequest="55" CornerRadius="12"/>
+                        <Button Text="Dodaj zadanie" Command="{Binding AddTaskCommand}" HeightRequest="55" CornerRadius="12" FontAttributes="Bold"/>
+                        <Button Text="Anuluj" Command="{Binding GoBackCommand}" BackgroundColor="Transparent" TextColor="{DynamicResource Primary}" BorderColor="{DynamicResource Primary}" BorderWidth="2" HeightRequest="55" CornerRadius="12"/>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
             </Border>

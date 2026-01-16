@@ -71,6 +71,12 @@ namespace TodoApp
             builder.Services.AddTransient<EditViewModel>();
             builder.Services.AddTransient<EditPage>();
 
+            /// <summary>
+            /// Dodawanie (Transient) - strona tworzenia nowego zadania. 
+            /// Rejestrowana jako Transient, aby formularz był czysty przy każdym otwarciu.
+            /// </summary>
+            builder.Services.AddTransient<AddPage>();
+
             return builder.Build();
         }
     }

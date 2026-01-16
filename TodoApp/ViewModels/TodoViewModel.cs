@@ -26,7 +26,7 @@ namespace TodoApp.ViewModels
         /// <summary>Prywatny bufor przechowujący wszystkie zadania pobrane z bazy danych.</summary>
         private List<TodoItem> _allTasks = new();
 
-        #region Właściwości Nowego Zadania
+        #region Właściwości Wyszukiwania i Nowego Zadania
 
         /// <summary>Tekst wpisany w wyszukiwarkę zadań.</summary>
         [ObservableProperty]
@@ -43,7 +43,7 @@ namespace TodoApp.ViewModels
         [ObservableProperty]
         string newTodoDescription = string.Empty;
 
-        /// <summary>Data planowanego zadania wybiarana w formularzu.</summary>
+        /// <summary>Data planowanego zadania wybierana w formularzu.</summary>
         [ObservableProperty]
         DateTime newTodoDate = DateTime.Now;
 
@@ -66,17 +66,12 @@ namespace TodoApp.ViewModels
 
         #region System Powiadomień Wewnętrznych
 
-        /// <summary>Zadanie, które w danej chwili wywołało powiadomienie (używane przez dymek Toast).</summary>
         [ObservableProperty]
         TodoItem currentNotificationTask = default!;
 
-        /// <summary>
-        /// Główna pętla sprawdzająca terminy zadań. Uruchamiana przez timer.
-        /// </summary>
         private async Task CheckNotificationsAsync()
         {
             var now = DateTime.Now;
-
             var tasksToNotify = _allTasks.Where(t =>
                 !t.IsDone &&
                 !t.HasShownNotification &&
@@ -87,15 +82,11 @@ namespace TodoApp.ViewModels
             {
                 task.HasShownNotification = true;
                 await _databaseService.SaveTodoAsync(task);
-
                 await PlayNotificationSound();
                 await ShowInAppNotification(task);
             }
         }
 
-        /// <summary>
-        /// Odtwarza plik dźwiękowy przypisany do powiadomienia.
-        /// </summary>
         private async Task PlayNotificationSound()
         {
             try
@@ -109,10 +100,6 @@ namespace TodoApp.ViewModels
             }
         }
 
-        /// <summary>
-        /// Inicjuje wyświetlenie animowanego dymka powiadomienia w widoku TodoPage.
-        /// </summary>
-        /// <param name="task">Zadanie, o którym przypominamy.</param>
         private async Task ShowInAppNotification(TodoItem task)
         {
             CurrentNotificationTask = task;
@@ -125,9 +112,6 @@ namespace TodoApp.ViewModels
 
         #endregion
 
-        /// <summary>
-        /// Konstruktor ViewModelu inicjalizujący serwisy, filtry oraz timer powiadomień.
-        /// </summary>
         public TodoViewModel(DatabaseService databaseService, IAudioManager audioManager)
         {
             _databaseService = databaseService;
@@ -140,9 +124,6 @@ namespace TodoApp.ViewModels
             _notificationTimer.Start();
         }
 
-        /// <summary>
-        /// Tworzy początkowe opcje filtrowania na podstawie listy kategorii.
-        /// </summary>
         void InitializeFilters()
         {
             FilterOptions.Clear();
@@ -153,9 +134,14 @@ namespace TodoApp.ViewModels
 
         #region Komendy (RelayCommand)
 
-        /// <summary>
-        /// Obsługuje wybór filtra kategorii przez użytkownika.
-        /// </summary>
+        /// <summary>Nawiguje do strony dodawania nowego zadania.</summary>
+        [RelayCommand]
+        async Task GoToAddPage() => await Shell.Current.GoToAsync(nameof(Views.AddPage));
+
+        /// <summary>Powraca do poprzedniej strony (np. po kliknięciu Anuluj lub Zapisz).</summary>
+        [RelayCommand]
+        async Task GoBack() => await Shell.Current.GoToAsync("..");
+
         [RelayCommand]
         void SelectFilter(FilterOption selectedOption)
         {
@@ -165,9 +151,6 @@ namespace TodoApp.ViewModels
             ApplyFilter();
         }
 
-        /// <summary>
-        /// Odświeża kolekcję Tasks na podstawie aktualnych kryteriów wyszukiwania i kategorii.
-        /// </summary>
         void ApplyFilter()
         {
             var activeFilter = FilterOptions.FirstOrDefault(f => f.IsSelected)?.Name ?? "Wszystkie";
@@ -183,9 +166,6 @@ namespace TodoApp.ViewModels
             }
         }
 
-        /// <summary>
-        /// Pobiera listę zadań zalogowanego użytkownika z bazy danych SQLite.
-        /// </summary>
         [RelayCommand]
         public async Task LoadTasks()
         {
@@ -203,7 +183,7 @@ namespace TodoApp.ViewModels
         }
 
         /// <summary>
-        /// Dodaje nowe zadanie do bazy danych i aktualizuje listę w pamięci bez mrugania ekranu.
+        /// Dodaje nowe zadanie, czyści formularz i wraca do listy głównej.
         /// </summary>
         [RelayCommand]
         async Task AddTask()
@@ -228,15 +208,17 @@ namespace TodoApp.ViewModels
             _allTasks = _allTasks.OrderBy(t => t.DueDate).ToList();
             ApplyFilter();
 
+            // Resetowanie pól
             NewTodoTitle = string.Empty;
             NewTodoDescription = string.Empty;
             NewTodoTime = DateTime.Now.TimeOfDay;
             NewTodoDate = DateTime.Now;
+            SelectedCategory = "Inne";
+
+            // Automatyczny powrót do listy
+            await GoBack();
         }
 
-        /// <summary>
-        /// Trwale usuwa zadanie z bazy danych oraz z aktualnego widoku.
-        /// </summary>
         [RelayCommand]
         async Task DeleteTask(TodoItem item)
         {
@@ -246,24 +228,17 @@ namespace TodoApp.ViewModels
             Tasks.Remove(item);
         }
 
-        /// <summary>
-        /// Przełącza status zadania (Zrobione/Niezrobione) i aktualizuje bazę danych.
-        /// </summary>
         [RelayCommand]
         async Task ToggleDone(TodoItem task)
         {
             if (task == null) return;
             task.IsDone = !task.IsDone;
-
             if (!task.IsDone && task.DueDate > DateTime.Now)
                 task.HasShownNotification = false;
 
             await _databaseService.SaveTodoAsync(task);
         }
 
-        /// <summary>
-        /// Przechodzi do strony edycji wybranego zadania.
-        /// </summary>
         [RelayCommand]
         async Task Tap(TodoItem task)
         {
@@ -272,11 +247,9 @@ namespace TodoApp.ViewModels
             await Shell.Current.GoToAsync(nameof(Views.EditPage), navigationParameter);
         }
 
-        /// <summary>Nawiguje do strony ustawień profilu.</summary>
         [RelayCommand]
         async Task GoToSettings() => await Shell.Current.GoToAsync(nameof(Views.SettingsPage));
 
-        /// <summary>Wylogowuje użytkownika i czyści preferencje sesji.</summary>
         [RelayCommand]
         async Task Logout()
         {

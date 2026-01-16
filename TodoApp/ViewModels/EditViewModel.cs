@@ -48,13 +48,16 @@ namespace TodoApp.ViewModels
 
         /// <summary>
         /// Wywoływane automatycznie, gdy obiekt TodoItem zostanie przypisany do ViewModelu.
-        /// Synchronizuje czas zadania z właściwością EditTodoTime.
+        /// Synchronizuje czas zadania z właściwością EditTodoTime oraz odświeża Picker.
         /// </summary>
         partial void OnTodoItemChanged(TodoItem value)
         {
             if (value != null)
             {
                 EditTodoTime = value.DueDate.TimeOfDay;
+
+                // Powiadomienie UI o zmianie obiektu wymusza na Pickerze dopasowanie kategorii
+                OnPropertyChanged(nameof(TodoItem));
             }
         }
 
@@ -77,8 +80,7 @@ namespace TodoApp.ViewModels
             TodoItem.DueDate = TodoItem.DueDate.Date.Add(EditTodoTime);
 
             // LOGIKA POWIADOMIEŃ:
-            // Jeśli użytkownik zmienił termin na przyszły, resetujemy flagę powiadomienia,
-            // aby system przypomnień mógł ponownie zareagować o nowej godzinie.
+            // Jeśli użytkownik zmienił termin na przyszły, resetujemy flagę powiadomienia
             if (TodoItem.DueDate > DateTime.Now)
             {
                 TodoItem.HasShownNotification = false;
