@@ -37,7 +37,7 @@
                 {
                     // 1. Definiowanie preferowanych wymiarów okna
                     window.Width = 550;
-                    window.Height = 750;
+                    window.Height = 780;
 
                     // 2. Pobieranie informacji o głównym wyświetlaczu
                     var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
@@ -52,7 +52,7 @@
 
                     // 5. Ustawienie minimalnych limitów rozmiaru dla wygody użytkownika
                     window.MinimumWidth = 500;
-                    window.MinimumHeight = 650;
+                    window.MinimumHeight = 750;
                 }
             }
 

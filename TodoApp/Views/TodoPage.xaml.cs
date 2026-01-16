@@ -38,7 +38,7 @@ public partial class TodoPage : ContentPage
                 await Task.Delay(4000);
 
                 // 3. Animacja wyjœcia: dymek chowa siê z powrotem na pozycjê -150 (poza ekran).
-                await NotificationToast.TranslateTo(0, -150, 500, Easing.CubicIn);
+                await NotificationToast.TranslateTo(0, -300, 500, Easing.CubicIn);
             });
         });
     }

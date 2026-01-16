@@ -5,7 +5,9 @@
              x:Class="TodoApp.Views.LoginPage"
              x:DataType="vm:LoginViewModel"
              Title="Logowanie"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
 
     <ScrollView HorizontalScrollBarVisibility="Never">
         <Grid>
@@ -17,7 +19,6 @@
                     Margin="30">
 
                 <VerticalStackLayout Spacing="25">
-
                     <Image Source="logo.png" 
                            HeightRequest="160" 
                            HorizontalOptions="Center" 
@@ -33,6 +34,7 @@
                         <Entry Placeholder="Nazwa użytkownika" 
                                Text="{Binding Username}" 
                                HorizontalOptions="Fill"
+                               WidthRequest="340"
                                TextColor="{AppThemeBinding Light=Black, Dark=White}"
                                BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
 
@@ -40,6 +42,7 @@
                                IsPassword="True" 
                                Text="{Binding Password}" 
                                HorizontalOptions="Fill"
+                               WidthRequest="340"
                                TextColor="{AppThemeBinding Light=Black, Dark=White}"
                                BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
                     </VerticalStackLayout>
@@ -57,7 +60,6 @@
                                 FontSize="14" 
                                 HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-
                 </VerticalStackLayout>
             </Border>
         </Grid>

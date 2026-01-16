@@ -4,7 +4,9 @@
              xmlns:vm="clr-namespace:TodoApp.ViewModels"
              x:Class="TodoApp.Views.EditPage"
              x:DataType="vm:EditViewModel"
-             Title="Edytuj zadanie">
+             Title="Edytuj zadanie"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
 
     <ScrollView HorizontalScrollBarVisibility="Never">
         <Grid>
@@ -41,7 +43,6 @@
                     </VerticalStackLayout>
 
                     <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween">
-
                         <VerticalStackLayout Spacing="5" FlexLayout.Basis="31%" FlexLayout.Grow="1" Margin="0,0,5,10" MinimumWidthRequest="150">
                             <Label Text="Termin:" FontAttributes="Bold"/>
                             <DatePicker Date="{Binding TodoItem.DueDate}" 
