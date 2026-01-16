@@ -22,11 +22,25 @@
             {
                 if (DeviceInfo.Platform == DevicePlatform.WinUI || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
                 {
-                    window.Width = 500;
-                    window.Height = 950;
+                    // 1. Ustawiamy wymiary (zmniejszone pod laptopa)
+                    window.Width = 450;
+                    window.Height = 750;
 
-                    window.MinimumWidth = 450;
-                    window.MinimumHeight = 700;
+                    // 2. Pobieramy wymiary wyświetlacza głównego
+                    var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
+
+                    // 3. Obliczamy środek (uwzględniając gęstość pikseli/skalowanie)
+                    // Dzielimy szerokość ekranu przez gęstość, odejmujemy połowę szerokości okna
+                    double x = (displayInfo.Width / displayInfo.Density - window.Width) / 2;
+                    double y = (displayInfo.Height / displayInfo.Density - window.Height) / 2;
+
+                    // 4. Ustawiamy pozycję okna
+                    window.X = x;
+                    window.Y = y;
+
+                    // Blokada minimalnych wymiarów
+                    window.MinimumWidth = 400;
+                    window.MinimumHeight = 600;
                 }
             }
 

@@ -9,7 +9,7 @@ public partial class TodoPage : ContentPage
     public TodoPage(TodoViewModel vm)
     {
         InitializeComponent();
-        //Shell.SetNavBarIsVisible(this, false);
+
         _viewModel = vm;
         BindingContext = _viewModel; // £¹czymy widok z logik¹
     }
@@ -18,7 +18,11 @@ public partial class TodoPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        // Wywo³ujemy komendê ³adowania zadañ z bazy
-        _viewModel.LoadTasksCommand.Execute(null);
+
+        // Bezpoœrednie wywo³anie metody asynchronicznej jest pewniejsze ni¿ Execute(null)
+        if (_viewModel != null)
+        {
+            _ = _viewModel.LoadTasks();
+        }
     }
 }
