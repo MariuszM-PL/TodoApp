@@ -20,9 +20,6 @@ namespace TodoApp.ViewModels
         [ObservableProperty]
         TodoItem todoItem = default!;
 
-        // ===================================================================
-        // ZMIANA: Definicja ręczna, żeby naprawić błąd "SelectedCategory does not exist"
-        // ===================================================================
         private string _selectedCategory;
 
         /// <summary>
@@ -33,9 +30,9 @@ namespace TodoApp.ViewModels
             get => _selectedCategory;
             set => SetProperty(ref _selectedCategory, value);
         }
-        // ===================================================================
 
         private TimeSpan _editTodoTime;
+
         /// <summary>
         /// Pomocnicza właściwość przechowująca czas (godzinę) zadania podczas edycji.
         /// </summary>
@@ -106,10 +103,10 @@ namespace TodoApp.ViewModels
             // Połączenie wybranej daty z wybraną godziną
             TodoItem.DueDate = TodoItem.DueDate.Date.Add(EditTodoTime);
 
-            // PRZEPISANIE KATEGORII Z POWROTEM DO ZADANIA
+            // Przepisanie wybranej kategorii z powrotem do zadania
             TodoItem.Category = SelectedCategory;
 
-            // LOGIKA POWIADOMIEŃ:
+            // Reset statusu powiadomienia, jeśli data została zmieniona na przyszłą
             if (TodoItem.DueDate > DateTime.Now)
             {
                 TodoItem.HasShownNotification = false;
