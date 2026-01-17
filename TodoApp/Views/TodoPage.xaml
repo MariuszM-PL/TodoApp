@@ -6,7 +6,7 @@
              x:Class="TodoApp.Views.TodoPage"
              x:DataType="vm:TodoViewModel"
              Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
-             Title="Lista zadań">
+             >
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Dodaj" Command="{Binding GoToAddPageCommand}">
