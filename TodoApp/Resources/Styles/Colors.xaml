@@ -9,17 +9,26 @@
     <Color x:Key="White">#FFFFFF</Color>
     <Color x:Key="Black">#000000</Color>
 
-    <Color x:Key="LightBackground">#F5F5F7</Color>
+    <Color x:Key="LightBackground">#E3E8EE</Color>
+
     <Color x:Key="LightCard">#FFFFFF</Color>
-    <Color x:Key="LightText">#1C1C1E</Color>
-    <Color x:Key="LightGrayText">#6E6E73</Color>
-    <Color x:Key="LightBorder">#AAAAAA</Color>
+
+    <Color x:Key="LightInputBackground">#F7F9FC</Color>
+
+    <Color x:Key="LightText">#2D3436</Color>
+    <Color x:Key="LightGrayText">#606060</Color>
+
+    <Color x:Key="LightBorder">#DFE6E9</Color>
 
     <Color x:Key="DarkBackground">#121212</Color>
     <Color x:Key="DarkCard">#1E1E1E</Color>
-    <Color x:Key="DarkText">#FFFFFF</Color>
+    <Color x:Key="DarkInputBackground">#2C2C2C</Color>
+
+    <Color x:Key="DarkText">#E0E0E0</Color>
     <Color x:Key="DarkGrayText">#AAAAAA</Color>
 
     <Color x:Key="ButtonText">#121212</Color>
+
+    <Color x:Key="PrimaryHover">#FFB300</Color>
 
 </ResourceDictionary>

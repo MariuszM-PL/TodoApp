@@ -36,8 +36,8 @@
                 if (DeviceInfo.Platform == DevicePlatform.WinUI || DeviceInfo.Platform == DevicePlatform.MacCatalyst)
                 {
                     // 1. Definiowanie preferowanych wymiarów okna
-                    window.Width = 550;
-                    window.Height = 780;
+                    window.Width = 600;
+                    window.Height = 900;
 
                     // 2. Pobieranie informacji o głównym wyświetlaczu
                     var displayInfo = DeviceDisplay.Current.MainDisplayInfo;
@@ -51,7 +51,7 @@
                     window.Y = y;
 
                     // 5. Ustawienie minimalnych limitów rozmiaru dla wygody użytkownika
-                    window.MinimumWidth = 500;
+                    window.MinimumWidth = 600;
                     window.MinimumHeight = 750;
                 }
             }

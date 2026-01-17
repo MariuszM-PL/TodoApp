@@ -8,53 +8,106 @@
              Shell.FlyoutBehavior="Disabled"
              Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
 
-    <ScrollView HorizontalScrollBarVisibility="Never">
-        <FlexLayout Direction="Column" JustifyContent="Start" AlignItems="Stretch" Padding="20">
+    <Grid BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#121212}">
 
-            <Border StrokeThickness="0" BackgroundColor="Transparent" MaximumWidthRequest="800" HorizontalOptions="Center">
+        <Border StrokeShape="RoundRectangle 20"
+                StrokeThickness="0"
+                Margin="15"
+                Padding="0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                MaximumWidthRequest="700"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
-                <VerticalStackLayout Spacing="20">
-                    <Label Text="Edycja zadania" FontSize="24" FontAttributes="Bold" TextColor="{DynamicResource Primary}"/>
+            <Border.Shadow>
+                <Shadow Brush="Black" Offset="0,5" Radius="10" Opacity="0.1"/>
+            </Border.Shadow>
+
+            <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Default">
+
+                <VerticalStackLayout Spacing="20" 
+                                     Padding="25" 
+                                     HorizontalOptions="Fill" 
+                                     VerticalOptions="Start">
+
+                    <Label Text="Edycja zadania" 
+                           FontSize="24" 
+                           FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           TextColor="{DynamicResource Primary}"/>
+
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#333333}" />
 
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Tytuł:" FontAttributes="Bold"/>
-                        <Entry Text="{Binding TodoItem.Title}" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                        <Entry Text="{Binding TodoItem.Title}" 
+                               BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C2C2C}"
+                               HorizontalOptions="Fill"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Opis:" FontAttributes="Bold"/>
-                        <Editor Text="{Binding TodoItem.Description}" AutoSize="TextChanges" MinimumHeightRequest="100" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                        <Editor Text="{Binding TodoItem.Description}" 
+                                AutoSize="TextChanges" 
+                                MinimumHeightRequest="120" 
+                                BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C2C2C}"
+                                HorizontalOptions="Fill"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="15">
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Termin:" FontAttributes="Bold"/>
-                            <DatePicker Date="{Binding TodoItem.DueDate}" Format="dd/MM/yyyy" BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
-                        </VerticalStackLayout>
 
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="Godzina:" FontAttributes="Bold"/>
-                            <TimePicker Time="{Binding EditTodoTime}" 
-                                        Format="HH:mm"
-                                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                                        BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
-                        </VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label Text="Termin:" FontAttributes="Bold"/>
+                                <DatePicker Date="{Binding TodoItem.DueDate}" 
+                                            Format="dd/MM/yyyy" 
+                                            BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C2C2C}" 
+                                            HorizontalOptions="Fill"/>
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="Godzina:" FontAttributes="Bold"/>
+                                <TimePicker Time="{Binding EditTodoTime}" 
+                                            Format="HH:mm" 
+                                            TextColor="{AppThemeBinding Light=Black, Dark=White}" 
+                                            BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C2C2C}"
+                                            HorizontalOptions="Fill"/>
+                            </VerticalStackLayout>
+                        </Grid>
 
                         <VerticalStackLayout Spacing="5">
                             <Label Text="Kategoria:" FontAttributes="Bold"/>
                             <Picker ItemsSource="{Binding Categories}" 
-                                    SelectedItem="{Binding TodoItem.Category, Mode=TwoWay}" 
+                                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" 
                                     Title="Wybierz kategorię" 
-                                    BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2C2C2C}"/>
+                                    BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#2C2C2C}"
+                                    HorizontalOptions="Fill"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
 
-                    <VerticalStackLayout Spacing="10" Margin="0,10,0,0">
-                        <Button Text="Zapisz zmiany" Command="{Binding UpdateTaskCommand}" HeightRequest="55" CornerRadius="12" FontAttributes="Bold"/>
-                        <Button Text="Anuluj" Command="{Binding CancelCommand}" BackgroundColor="Transparent" TextColor="{DynamicResource Primary}" BorderColor="{DynamicResource Primary}" BorderWidth="2" HeightRequest="55" CornerRadius="12"/>
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,20,0,0">
+                        <Button Grid.Column="0"
+                                Text="Zapisz zmiany" 
+                                Command="{Binding UpdateTaskCommand}" 
+                                HeightRequest="50" 
+                                CornerRadius="10" 
+                                FontAttributes="Bold"
+                                HorizontalOptions="Fill"/>
+
+                        <Button Grid.Column="1"
+                                Text="Anuluj" 
+                                Command="{Binding CancelCommand}" 
+                                BackgroundColor="Transparent" 
+                                TextColor="{DynamicResource Primary}" 
+                                BorderColor="{DynamicResource Primary}" 
+                                BorderWidth="2" 
+                                HeightRequest="50" 
+                                CornerRadius="10"
+                                HorizontalOptions="Fill"/>
+                    </Grid>
+
                 </VerticalStackLayout>
-            </Border>
-        </FlexLayout>
-    </ScrollView>
+            </ScrollView>
+        </Border>
+    </Grid>
 </ContentPage>

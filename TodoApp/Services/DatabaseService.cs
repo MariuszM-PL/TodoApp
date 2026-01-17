@@ -20,11 +20,17 @@ namespace TodoApp.Services
             if (_database is not null)
                 return;
 
-            // Ścieżka do pliku bazy danych w bezpiecznym folderze aplikacji
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "TodoApp.db");
-            _database = new SQLiteAsyncConnection(dbPath);
 
-            // Automatyczne tworzenie tabel na podstawie modeli
+            // --- [DODAJ TO NA CHWILĘ] ---
+            // To usunie stary plik bazy, który blokuje Ci rejestrację
+            if (File.Exists(dbPath))
+            {
+                //File.Delete(dbPath); // <--- KASOWANIE STAREJ BAZY
+            }
+            // ----------------------------
+
+            _database = new SQLiteAsyncConnection(dbPath);
             await _database.CreateTableAsync<User>();
             await _database.CreateTableAsync<TodoItem>();
         }

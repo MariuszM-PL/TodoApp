@@ -20,6 +20,21 @@ namespace TodoApp.ViewModels
         [ObservableProperty]
         TodoItem todoItem = default!;
 
+        // ===================================================================
+        // ZMIANA: Definicja ręczna, żeby naprawić błąd "SelectedCategory does not exist"
+        // ===================================================================
+        private string _selectedCategory;
+
+        /// <summary>
+        /// Wybrana kategoria w Pickerze.
+        /// </summary>
+        public string SelectedCategory
+        {
+            get => _selectedCategory;
+            set => SetProperty(ref _selectedCategory, value);
+        }
+        // ===================================================================
+
         private TimeSpan _editTodoTime;
         /// <summary>
         /// Pomocnicza właściwość przechowująca czas (godzinę) zadania podczas edycji.
@@ -54,9 +69,21 @@ namespace TodoApp.ViewModels
         {
             if (value != null)
             {
+                // Synchronizacja godziny z kontrolką TimePicker
                 EditTodoTime = value.DueDate.TimeOfDay;
 
-                // Powiadomienie UI o zmianie obiektu wymusza na Pickerze dopasowanie kategorii
+                // Przepisujemy kategorię z obiektu zadania do właściwości SelectedCategory
+                if (!string.IsNullOrEmpty(value.Category))
+                {
+                    SelectedCategory = value.Category;
+                }
+                else
+                {
+                    // Jeśli zadanie nie ma kategorii, ustawiamy domyślną
+                    SelectedCategory = Categories.FirstOrDefault();
+                }
+
+                // Powiadomienie UI o zmianie obiektu
                 OnPropertyChanged(nameof(TodoItem));
             }
         }
@@ -79,8 +106,10 @@ namespace TodoApp.ViewModels
             // Połączenie wybranej daty z wybraną godziną
             TodoItem.DueDate = TodoItem.DueDate.Date.Add(EditTodoTime);
 
+            // PRZEPISANIE KATEGORII Z POWROTEM DO ZADANIA
+            TodoItem.Category = SelectedCategory;
+
             // LOGIKA POWIADOMIEŃ:
-            // Jeśli użytkownik zmienił termin na przyszły, resetujemy flagę powiadomienia
             if (TodoItem.DueDate > DateTime.Now)
             {
                 TodoItem.HasShownNotification = false;
