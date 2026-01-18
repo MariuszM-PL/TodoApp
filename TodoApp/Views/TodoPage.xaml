@@ -5,8 +5,7 @@
              xmlns:models="clr-namespace:TodoApp.Models"
              x:Class="TodoApp.Views.TodoPage"
              x:DataType="vm:TodoViewModel"
-             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}"
-             >
+             Shell.BackButtonBehavior="{BackButtonBehavior IsVisible=False}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Dodaj" Command="{Binding GoToAddPageCommand}">
@@ -79,7 +78,11 @@
                 </FlexLayout>
             </VerticalStackLayout>
 
-            <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}" SelectionMode="None" Margin="0,5,0,0">
+            <CollectionView Grid.Row="1" 
+                            ItemsSource="{Binding Tasks}" 
+                            SelectionMode="None" 
+                            Margin="0,5,0,0">
+
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
                 </CollectionView.ItemsLayout>
@@ -144,7 +147,7 @@
                                         </Label.Triggers>
                                     </Label>
 
-                                    <Label Text="{Binding Description}" FontSize="13" TextColor="Gray" LineBreakMode="TailTruncation" MaxLines="2">
+                                    <Label Text="{Binding Description}" FontSize="13" TextColor="Gray" LineBreakMode="WordWrap">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsDone}" Value="True">
                                                 <Setter Property="TextDecorations" Value="Strikethrough" />

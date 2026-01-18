@@ -87,13 +87,14 @@ namespace TodoApp.ViewModels
 
         /// <summary>
         /// Zapisuje zmiany wprowadzone w zadaniu do bazy danych.
+        /// Przed zapisem sprawdza walidację tytułu.
         /// </summary>
         [RelayCommand]
         async Task UpdateTask()
         {
             if (TodoItem == null) return;
 
-            // Walidacja danych wejściowych
+            // WALIDACJA: Sprawdzenie czy tytuł nie jest pusty
             if (string.IsNullOrWhiteSpace(TodoItem.Title))
             {
                 await Shell.Current.DisplayAlert("Błąd", "Tytuł zadania nie może być pusty!", "OK");

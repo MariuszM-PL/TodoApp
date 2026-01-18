@@ -183,12 +183,18 @@ namespace TodoApp.ViewModels
         }
 
         /// <summary>
-        /// Dodaje nowe zadanie, czyści formularz i wraca do listy głównej.
+        /// Dodaje nowe zadanie do bazy. Sprawdza czy tytuł nie jest pusty.
+        /// Jeśli jest pusty - wyświetla alert.
         /// </summary>
         [RelayCommand]
         async Task AddTask()
         {
-            if (string.IsNullOrWhiteSpace(NewTodoTitle)) return;
+            // WALIDACJA: Sprawdzenie czy tytuł nie jest pusty
+            if (string.IsNullOrWhiteSpace(NewTodoTitle))
+            {
+                await Shell.Current.DisplayAlert("Błąd", "Musisz wpisać tytuł zadania!", "OK");
+                return;
+            }
 
             DateTime combinedDueDate = NewTodoDate.Date.Add(NewTodoTime);
             var newTask = new TodoItem
