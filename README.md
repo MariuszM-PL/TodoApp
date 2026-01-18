@@ -60,11 +60,13 @@ Aplikacja łączy w sobie cechy klasycznego menedżera zadań z rozwiązaniami d
 Aby utworzyć samodzielny plik wykonywalny (niewymagający instalacji), użyj terminala w folderze projektu:
 ```powershell
 dotnet publish -f net8.0-windows10.0.19041.0 -c Release -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -p:RuntimeIdentifierOverride=win10-x64
----
-
+```
 ### 👥 Autorzy
 
 * **Mariusz Mikołajczyk**
 * **Patrycja Dorszyńska**
 
 *Projekt zrealizowany w celach edukacyjnych na zaliczenie przedmiotu.*
+
+
+
