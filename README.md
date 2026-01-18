@@ -66,7 +66,7 @@ dotnet publish -f net8.0-windows10.0.19041.0 -c Release -p:WindowsPackageType=No
 * **Mariusz Mikołajczyk**
 * **Patrycja Dorszyńska**
 
-*Projekt zrealizowany w celach edukacyjnych na zaliczenie przedmiotu.*
-
-
+*Projekt zrealizowany w celach edukacyjnych na zaliczenie przedmiotu Wprowadzenie do technologii .NET.*
+*Kierunek: Informatyka*
+*Rok akademicki: 2025/2026*
 
