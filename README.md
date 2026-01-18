@@ -2,25 +2,32 @@
 
 ![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-8.0-purple) ![Platform](https://img.shields.io/badge/Platform-Windows-blue) ![License](https://img.shields.io/badge/License-MIT-green)
 
-**Nowoczesna aplikacja desktopowa do zarządzania zadaniami**, zbudowana w technologii **.NET MAUI** (WinUI 3). Projekt koncentruje się na przejrzystym interfejsie użytkownika, responsywności (skalowanie okna), bezpieczeństwie danych oraz architekturze zgodnej ze wzorcem MVVM.
+**Nowoczesna aplikacja desktopowa do zarządzania zadaniami**, zbudowana w technologii **.NET MAUI** (WinUI 3). Projekt koncentruje się na przejrzystym interfejsie użytkownika, pełnej responsywności okna, bezpieczeństwie danych oraz architekturze zgodnej ze wzorcem MVVM.
 
-## 🚀 Kluczowe Rozwiązania Desktopowe
+Aplikacja została zaprojektowana specyficznie pod środowisko Windows, oferując natywne doświadczenia, takie jak obsługa paska tytułu, skalowanie formularzy czy integracja z systemem plików.
 
-* **🖥️ Pełna Responsywność**: Formularze dodawania i edycji zadań automatycznie dostosowują układ (pionowy/poziomy) do szerokości okna, zachowując czytelność na każdym monitorze.
-* **🔔 Autorski System Powiadomień**: Własny mechanizm "Toast Notification" z animacjami, zaprojektowany specjalnie pod obszar roboczy pulpitu Windows.
-* **🔊 Sygnalizacja Audio**: Integracja dźwiękowa (`notification.wav`) informująca o nadchodzących terminach w czasie rzeczywistym.
-* **🪟 Optymalizacja Okna**:
-    * Automatyczne centrowanie aplikacji przy starcie.
-    * Zablokowane minimalne wymiary dla zachowania spójności UI.
-    * Generowanie bezpośredniego pliku `.exe` (Windows App SDK Self-Contained).
+## ✨ Funkcjonalności i Możliwości
 
-## ✨ Funkcjonalność
+Aplikacja łączy w sobie cechy klasycznego menedżera zadań z rozwiązaniami dedykowanymi dla aplikacji okienkowych.
 
-* **🛡️ Bezpieczeństwo**: Rejestracja i logowanie użytkowników z nieodwracalnym haszowaniem haseł (**SHA-256**).
-* **🗄️ Lokalna Baza Danych**: Wykorzystanie **SQLite** (asynchroniczne operacje I/O) do trwałego przechowywania zadań i ustawień.
-* **🎨 Personalizacja**: Pełne wsparcie dla motywu **Jasnego** i **Ciemnego** (z poprawioną czytelnością kontrolek systemowych TimePicker/DatePicker).
-* **🔍 Filtrowanie i Kategorie**: System kategoryzacji zadań (Dom, Praca, Szkoła itp.) z dynamicznym kolorowaniem etykiet.
-* **✅ Status Zadań**: Wizualne przekreślanie i wyszarzanie ukończonych zadań (tytuł, opis, termin).
+### 🖥️ User Experience i Responsywność
+* **Adaptacyjny Układ**: Formularze dodawania i edycji zadań inteligentnie dostosowują się do szerokości okna, co gwarantuje czytelność na każdym monitorze.
+* **Personalizacja Motywu**: Pełne wsparcie dla trybu **Jasnego** i **Ciemnego** (Dark Mode), ze starannie dobraną paletą kolorów dla kontrolek systemowych (TimePicker, DatePicker).
+* **Optymalizacja Okna**: Automatyczne centrowanie aplikacji przy starcie oraz blokada minimalnych wymiarów, aby zapobiec "psuciu się" interfejsu przy zbyt małym oknie.
+
+### 📋 Zarządzanie Zadaniami
+* **Zaawansowane Filtrowanie**: System kategorii (Dom, Praca, Szkoła, Zakupy, Inne) pozwalający na szybkie sortowanie obowiązków.
+* **Wizualizacja Statusu**: Przejrzyste oznaczanie zadań wykonanych poprzez przekreślenie tekstu i zmianę jego przezroczystości (tytuł, opis, termin).
+* **Walidacja Danych**: Zabezpieczenia formularzy (np. wymóg podania tytułu) zapobiegające tworzeniu pustych wpisów.
+
+### 🔔 Powiadomienia i Audio
+* **Autorski System "Toast"**: Własny mechanizm powiadomień wyskakujących wewnątrz aplikacji, zaprojektowany z myślą o estetyce WinUI 3.
+* **Sygnalizacja Dźwiękowa**: Integracja z systemem audio (`notification.wav`) – aplikacja odtwarza dźwięk w momencie nadejścia terminu zadania, nawet gdy działa w tle.
+
+### 🛡️ Dane i Bezpieczeństwo
+* **Lokalna Baza Danych**: Wykorzystanie silnika **SQLite** do trwałego i szybkiego przechowywania danych offline.
+* **Bezpieczne Logowanie**: System rejestracji użytkowników wykorzystujący algorytm **SHA-256** do nieodwracalnego haszowania haseł.
+* **Izolacja Danych**: Każdy użytkownik ma dostęp wyłącznie do swoich zadań.
 
 ## 🛠️ Stack Technologiczny
 
@@ -28,7 +35,7 @@
 * **Wzorzec projektowy**: MVVM (CommunityToolkit.Mvvm)
 * **Baza danych**: SQLite-net-pcl (lokalny plik `.db`)
 * **Audio**: Plugin.Maui.Audio
-* **UI**: XAML + FlexLayout/Grid dla responsywności
+* **UI**: XAML + FlexLayout/Grid (Responsive Design)
 
 ## 🏗️ Struktura Projektu
 
@@ -40,6 +47,7 @@
 
 ## 📥 Instrukcja Uruchomienia
 
+### Deweloperska (Visual Studio)
 1.  Sklonuj repozytorium:
     ```bash
     git clone [https://github.com/TwojLogin/TodoApp.git](https://github.com/TwojLogin/TodoApp.git)
@@ -48,8 +56,10 @@
 3.  Jako cel uruchomienia wybierz **Windows Machine**.
 4.  Naciśnij **F5**, aby skompilować i uruchomić aplikację.
 
-> **Uwaga:** Aplikacja generuje plik wykonywalny `.exe` w trybie *Self-Contained*, co oznacza, że nie wymaga od użytkownika końcowego instalowania dodatkowych bibliotek Windows App SDK.
-
+### Generowanie pliku .exe (Opcjonalnie)
+Aby utworzyć samodzielny plik wykonywalny (niewymagający instalacji), użyj terminala w folderze projektu:
+```powershell
+dotnet publish -f net8.0-windows10.0.19041.0 -c Release -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -p:RuntimeIdentifierOverride=win10-x64
 ---
 
 ### 👥 Autorzy
